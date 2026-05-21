@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolacha – Gerenciador de Tarefas</title>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f172a, #1e293b);
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --accent-orange: #f97316;
+            --accent-yellow: #eab308;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-glow: rgba(249, 115, 22, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px var(--border-glow);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--accent-orange), var(--accent-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            color: var(--accent-yellow);
+            border-left: 4px solid var(--accent-orange);
+            padding-left: 10px;
+        }
+
+        p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .grid-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--accent-orange);
+            border-color: var(--accent-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(249, 115, 22, 0.4);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--accent-orange);
+            font-weight: 600;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="logo">🍪</div>
+            <h1>Bolacha</h1>
+            <p class="subtitle">Gerenciador de Tarefas Sem Enrolação</p>
+        </header>
+
+        <main>
+            <h2>🚀 O que é o Bolacha?</h2>
+            <p>O Bolacha é um ecossistema de produtividade digital focado em organizar sua rotina de forma simples, direta e com alertas inteligentes. Unimos tarefas, notas e calendários em uma única linha do tempo fluida.</p>
+
+            <h2>📱 Aplicativo Organizador</h2>
+            <p>O planejador diário ideal para quem busca uma visão limpa do seu dia a dia. Monitore suas metas, crie listas de compras e organize projetos profissionais.</p>
+            
+            <div class="grid-buttons">
+                <a href="#" class="btn">🤖 Android (Play Store)</a>
+                <a href="#" class="btn">🍏 iOS (App Store)</a>
+                <a href="#" class="btn">💻 Bolacha Web</a>
+            </div>
+
+            <h2>⚡ Bolacha Premium (Comportamental)</h2>
+            <p>Precisa de um empurrão extra? A nossa versão web utiliza conceitos de ciência comportamental com o disparo de notificações insistentes. Você só para quando concluir a tarefa.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Recurso</th>
+                        <th>Bolacha Grátis</th>
+                        <th>Bolacha Premium</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Linha do Tempo Única</td>
+                        <td>✅ Disponível</td>
+                        <td>✅ Disponível</td>
+                    </tr>
+                    <tr>
+                        <td>Lembretes Insistentes</td>
+                        <td>❌ Indisponível</td>
+                        <td>🔥 Ativo</td>
+                    </tr>
+                    <tr>
+                        <td>Sincronização Cloud</td>
+                        <td>✅ Limite 2 disp.</td>
+                        <td>🚀 Ilimitado</td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+
+        <footer>
+            Feito com ❤️ para organizar a sua rotina.
+        </footer>
+    </div>
+
+</body>
+</html>
+
