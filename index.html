@@ -3,211 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolacha – Gerenciador de Tarefas</title>
+    <title>Bolacha Engine – Automação e Tarefas</title>
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a, #1e293b);
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --accent-orange: #f97316;
-            --accent-yellow: #eab308;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-glow: rgba(249, 115, 22, 0.2);
+            --bg: #0b0f19;
+            --card-bg: #131a2c;
+            --accent: #f97316;
+            --accent-glow: rgba(249, 115, 22, 0.15);
+            --text: #f8fafc;
+            --muted: #64748b;
+            --success: #10b981;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: var(--bg); color: var(--text); padding: 2rem 1rem; display: flex; justify-content: center; }
+        
+        .app-container { max-width: 900px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        @media (max-width: 768px) { .app-container { grid-template-columns: 1fr; } }
 
-        body {
-            background: var(--bg-gradient);
-            color: var(--text-main);
-            min-height: 100vh;
-            padding: 2rem 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+        .panel { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        h2 { font-size: 1.25rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; color: var(--accent); }
+        
+        /* Formulários e Inputs */
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.4rem; }
+        input, select, textarea { width: 100%; padding: 0.75rem; background: #0b0f19; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 0.9rem; }
+        input:focus, select:focus { border-color: var(--accent); outline: none; }
+        
+        /* Botões */
+        .btn-primary { width: 100%; padding: 0.75rem; background: var(--accent); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-primary:hover { background: #ea580c; transform: translateY(-1px); }
 
-        .container {
-            max-width: 800px;
-            width: 100%;
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 2.5rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px var(--border-glow);
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-
-        .logo {
-            font-size: 4rem;
-            margin-bottom: 0.5rem;
-            display: inline-block;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(to right, var(--accent-orange), var(--accent-yellow));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            margin: 2rem 0 1rem;
-            color: var(--accent-yellow);
-            border-left: 4px solid var(--accent-orange);
-            padding-left: 10px;
-        }
-
-        p {
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
-
-        .grid-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.8rem 1.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: var(--text-main);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .btn:hover {
-            background: var(--accent-orange);
-            border-color: var(--accent-orange);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(249, 115, 22, 0.4);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1.5rem;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        th {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--accent-orange);
-            font-weight: 600;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 3rem;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 1.5rem;
-        }
+        /* Lista de Tarefas / Console */
+        .task-list { display: flex; flex-direction: column; gap: 0.75rem; max-height: 250px; overflow-y: auto; }
+        .task-item { background: #0b0f19; padding: 0.75rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--accent); }
+        .task-item.done { border-left-color: var(--success); opacity: 0.7; }
+        
+        .terminal { background: #05070f; border-radius: 8px; padding: 1rem; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #38bdf8; height: 180px; overflow-y: auto; box-shadow: inset 0 0 10px #000; }
+        .log-entry { margin-bottom: 0.3rem; }
+        .log-entry.success { color: var(--success); }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <div class="logo">🍪</div>
-            <h1>Bolacha</h1>
-            <p class="subtitle">Gerenciador de Tarefas Sem Enrolação</p>
-        </header>
-
-        <main>
-            <h2>🚀 O que é o Bolacha?</h2>
-            <p>O Bolacha é um ecossistema de produtividade digital focado em organizar sua rotina de forma simples, direta e com alertas inteligentes. Unimos tarefas, notas e calendários em uma única linha do tempo fluida.</p>
-
-            <h2>📱 Aplicativo Organizador</h2>
-            <p>O planejador diário ideal para quem busca uma visão limpa do seu dia a dia. Monitore suas metas, crie listas de compras e organize projetos profissionais.</p>
+    <div class="app-container">
+        
+        <!-- PAINEL ESQUERDO: CONTROLE E AUTOMAÇÃO -->
+        <div class="panel">
+            <h2>🍪 Inicializador Bolacha Script</h2>
+            <p style="font-size:0.85rem; color:var(--muted); margin-bottom: 1rem;">Configure os parâmetros e envie a requisição de automação local para o navegador.</p>
             
-            <div class="grid-buttons">
-                <a href="#" class="btn">🤖 Android (Play Store)</a>
-                <a href="#" class="btn">🍏 iOS (App Store)</a>
-                <a href="#" class="btn">💻 Bolacha Web</a>
+            <div class="form-group">
+                <label>Plataforma Alvo</label>
+                <select id="platformSelect">
+                    <option value="cmsp">Sala do Futuro (CMSP)</option>
+                    <option value="tarefasp">TarefaSP</option>
+                    <option value="matific">Matific</option>
+                </select>
             </div>
 
-            <h2>⚡ Bolacha Premium (Comportamental)</h2>
-            <p>Precisa de um empurrão extra? A nossa versão web utiliza conceitos de ciência comportamental com o disparo de notificações insistentes. Você só para quando concluir a tarefa.</p>
+            <div class="form-group">
+                <label>Token de Autenticação / Chave da Atividade</label>
+                <input type="text" id="tokenInput" placeholder="Cole o token da sua sessão aqui...">
+            </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Recurso</th>
-                        <th>Bolacha Grátis</th>
-                        <th>Bolacha Premium</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Linha do Tempo Única</td>
-                        <td>✅ Disponível</td>
-                        <td>✅ Disponível</td>
-                    </tr>
-                    <tr>
-                        <td>Lembretes Insistentes</td>
-                        <td>❌ Indisponível</td>
-                        <td>🔥 Ativo</td>
-                    </tr>
-                    <tr>
-                        <td>Sincronização Cloud</td>
-                        <td>✅ Limite 2 disp.</td>
-                        <td>🚀 Ilimitado</td>
-                    </tr>
-                </tbody>
-            </table>
-        </main>
+            <div class="form-group">
+                <label>Ação Automatizada</label>
+                <select id="actionSelect">
+                    <option value="resolve">Resolver Questionários Pendentes</option>
+                    <option value="bypass">Ignorar Temporizadores de Leitura</option>
+                    <option value="submit">Submissão em Lote (Bulk Submit)</option>
+                </select>
+            </div>
 
-        <footer>
-            Feito com ❤️ para organizar a sua rotina.
-        </footer>
+            <button class="btn-primary" onclick="runAutomationEngine()">Injetar & Executar Script</button>
+        </div>
+
+        <!-- PAINEL DIREITO: FILA DE EXECUÇÃO E CONSOLE LOG -->
+        <div class="panel" style="display: flex; flex-direction: column; gap: 1.2rem;">
+            <div>
+                <h2>📋 Fila de Operações Ativas</h2>
+                <div class="task-list" id="taskList">
+                    <div class="task-item">
+                        <div>
+                            <strong style="font-size:0.9rem;">Tarefa #4819 - Matemática</strong>
+                            <p style="font-size:0.75rem; color:var(--muted)">Aguardando trigger do script</p>
+                        </div>
+                        <span style="color: var(--accent); font-size: 0.8rem; font-weight: bold;">Pendente</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h2>💻 Console do Engine (Logs)</h2>
+                <div class="terminal" id="terminalLog">
+                    <div class="log-entry">[SISTEMA] Engine Bolacha iniciado com sucesso.</div>
+                    <div class="log-entry">[SISTEMA] Aguardando injeção de payload...</div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
+    <script>
+        // Função que simula o comportamento interno do motor de script (Taskitos/Bolacha)
+        function runAutomationEngine() {
+            const platform = document.getElementById('platformSelect').value;
+            const token = document.getElementById('tokenInput').value;
+            const action = document.getElementById('actionSelect').value;
+            const terminal = document.getElementById('terminalLog');
+            const taskList = document.getElementById('taskList');
+
+            if (!token) {
+                alert('Por favor, insira o Token de Autenticação para validar o script nas requisições!');
+                return;
+            }
+
+            // Log de Início
+            addLog(`[REQUISIÇÃO] Conectando à API da plataforma: ${platform.toUpperCase()}...`, 'info');
+            
+            setTimeout(() => {
+                addLog(`[AUTH] Token validado com sucesso. Iniciando rotina de ${action}...`, 'info');
+                
+                // Simula processamento de pacotes de dados
+                setTimeout(() => {
+                    addLog(`[PROCESS] Executando rotina matemática e resolvendo payloads...`, 'info');
+                    
+                    // Conclusão e atualização da interface
+                    setTimeout(() => {
+                        addLog(`[SUCESSO] Operação finalizada. Atividades integradas com sucesso!`, 'success');
+                        
+                        // Atualiza dinamicamente a fila visual de tarefas concluídas
+                        taskList.innerHTML = `
+                            <div class="task-item done">
+                                <div>
+                                    <strong style="font-size:0.9rem;">Tarefa #4819 - Matemática</strong>
+                                    <p style="font-size:0.75rem; color:var(--muted)">Finalizado via Bolacha Engine</p>
+                                </div>
+                                <span style="color: var(--success); font-size: 0.8rem; font-weight: bold;">Concluído</span>
+                            </div>
+                        `;
+                    }, 1200);
+                }, 1000);
+            }, 800);
+        }
+
+        function addLog(text, type) {
+            const terminal = document.getElementById('terminalLog');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type === 'success' ? 'success' : ''}`;
+            entry.innerText = `${new Date().toLocaleTimeString()} - ${text}`;
+            terminal.appendChild(entry);
+            terminal.scrollTop = terminal.scrollHeight; // Auto-scroll
+        }
+    </script>
 </body>
 </html>
-
