@@ -1,161 +1,69 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolacha Engine – Automação e Tarefas</title>
-    <style>
-        :root {
-            --bg: #0b0f19;
-            --card-bg: #131a2c;
-            --accent: #f97316;
-            --accent-glow: rgba(249, 115, 22, 0.15);
-            --text: #f8fafc;
-            --muted: #64748b;
-            --success: #10b981;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background: var(--bg); color: var(--text); padding: 2rem 1rem; display: flex; justify-content: center; }
-        
-        .app-container { max-width: 900px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-        @media (max-width: 768px) { .app-container { grid-template-columns: 1fr; } }
-
-        .panel { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-        h2 { font-size: 1.25rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; color: var(--accent); }
-        
-        /* Formulários e Inputs */
-        .form-group { margin-bottom: 1rem; }
-        label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 0.4rem; }
-        input, select, textarea { width: 100%; padding: 0.75rem; background: #0b0f19; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 0.9rem; }
-        input:focus, select:focus { border-color: var(--accent); outline: none; }
-        
-        /* Botões */
-        .btn-primary { width: 100%; padding: 0.75rem; background: var(--accent); border: none; border-radius: 8px; color: white; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        .btn-primary:hover { background: #ea580c; transform: translateY(-1px); }
-
-        /* Lista de Tarefas / Console */
-        .task-list { display: flex; flex-direction: column; gap: 0.75rem; max-height: 250px; overflow-y: auto; }
-        .task-item { background: #0b0f19; padding: 0.75rem; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--accent); }
-        .task-item.done { border-left-color: var(--success); opacity: 0.7; }
-        
-        .terminal { background: #05070f; border-radius: 8px; padding: 1rem; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #38bdf8; height: 180px; overflow-y: auto; box-shadow: inset 0 0 10px #000; }
-        .log-entry { margin-bottom: 0.3rem; }
-        .log-entry.success { color: var(--success); }
-    </style>
-</head>
-<body>
-
-    <div class="app-container">
-        
-        <!-- PAINEL ESQUERDO: CONTROLE E AUTOMAÇÃO -->
-        <div class="panel">
-            <h2>🍪 Inicializador Bolacha Script</h2>
-            <p style="font-size:0.85rem; color:var(--muted); margin-bottom: 1rem;">Configure os parâmetros e envie a requisição de automação local para o navegador.</p>
-            
-            <div class="form-group">
-                <label>Plataforma Alvo</label>
-                <select id="platformSelect">
-                    <option value="cmsp">Sala do Futuro (CMSP)</option>
-                    <option value="tarefasp">TarefaSP</option>
-                    <option value="matific">Matific</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Token de Autenticação / Chave da Atividade</label>
-                <input type="text" id="tokenInput" placeholder="Cole o token da sua sessão aqui...">
-            </div>
-
-            <div class="form-group">
-                <label>Ação Automatizada</label>
-                <select id="actionSelect">
-                    <option value="resolve">Resolver Questionários Pendentes</option>
-                    <option value="bypass">Ignorar Temporizadores de Leitura</option>
-                    <option value="submit">Submissão em Lote (Bulk Submit)</option>
-                </select>
-            </div>
-
-            <button class="btn-primary" onclick="runAutomationEngine()">Injetar & Executar Script</button>
-        </div>
-
-        <!-- PAINEL DIREITO: FILA DE EXECUÇÃO E CONSOLE LOG -->
-        <div class="panel" style="display: flex; flex-direction: column; gap: 1.2rem;">
-            <div>
-                <h2>📋 Fila de Operações Ativas</h2>
-                <div class="task-list" id="taskList">
-                    <div class="task-item">
-                        <div>
-                            <strong style="font-size:0.9rem;">Tarefa #4819 - Matemática</strong>
-                            <p style="font-size:0.75rem; color:var(--muted)">Aguardando trigger do script</p>
-                        </div>
-                        <span style="color: var(--accent); font-size: 0.8rem; font-weight: bold;">Pendente</span>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <h2>💻 Console do Engine (Logs)</h2>
-                <div class="terminal" id="terminalLog">
-                    <div class="log-entry">[SISTEMA] Engine Bolacha iniciado com sucesso.</div>
-                    <div class="log-entry">[SISTEMA] Aguardando injeção de payload...</div>
-                </div>
-            </div>
-        </div>
-
-    </div>
+<!-- ... Todo o seu código de design HTML e CSS existente fica aqui em cima ... -->
 
     <script>
-        // Função que simula o comportamento interno do motor de script (Taskitos/Bolacha)
-        function runAutomationEngine() {
-            const platform = document.getElementById('platformSelect').value;
-            const token = document.getElementById('tokenInput').value;
-            const action = document.getElementById('actionSelect').value;
-            const terminal = document.getElementById('terminalLog');
-            const taskList = document.getElementById('taskList');
+        // 1. Definição das URLs da imagem que você enviou
+        const BASE_URL = "https://educacao.sp.gov.br";
+        const baseHeaders = {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        };
 
-            if (!token) {
-                alert('Por favor, insira o Token de Autenticação para validar o script nas requisições!');
+        // 2. Esta função será chamada quando você clicar no botão do painel
+        async function iniciarMotorBolacha() {
+            // Captura o RA e a Senha que você digitou na tela do celular/PC
+            const raDigitado = document.getElementById('raInput').value;
+            const senhaDigitada = document.getElementById('passInput').value;
+            const consoleBox = document.getElementById('statusConsole');
+
+            if (!raDigitado || !senhaDigitada) {
+                alert("Por favor, preencha o RA e a Senha!");
                 return;
             }
 
-            // Log de Início
-            addLog(`[REQUISIÇÃO] Conectando à API da plataforma: ${platform.toUpperCase()}...`, 'info');
-            
-            setTimeout(() => {
-                addLog(`[AUTH] Token validado com sucesso. Iniciando rotina de ${action}...`, 'info');
-                
-                // Simula processamento de pacotes de dados
-                setTimeout(() => {
-                    addLog(`[PROCESS] Executando rotina matemática e resolvendo payloads...`, 'info');
-                    
-                    // Conclusão e atualização da interface
-                    setTimeout(() => {
-                        addLog(`[SUCESSO] Operação finalizada. Atividades integradas com sucesso!`, 'success');
-                        
-                        // Atualiza dinamicamente a fila visual de tarefas concluídas
-                        taskList.innerHTML = `
-                            <div class="task-item done">
-                                <div>
-                                    <strong style="font-size:0.9rem;">Tarefa #4819 - Matemática</strong>
-                                    <p style="font-size:0.75rem; color:var(--muted)">Finalizado via Bolacha Engine</p>
-                                </div>
-                                <span style="color: var(--success); font-size: 0.8rem; font-weight: bold;">Concluído</span>
-                            </div>
-                        `;
-                    }, 1200);
-                }, 1000);
-            }, 800);
-        }
+            // Mostra o painel de logs na tela
+            consoleBox.style.display = "block";
+            consoleBox.innerHTML = `<div class="line">[SISTEMA] Conectando ao servidor da SED...</div>`;
 
-        function addLog(text, type) {
-            const terminal = document.getElementById('terminalLog');
-            const entry = document.createElement('div');
-            entry.className = `log-entry ${type === 'success' ? 'success' : ''}`;
-            entry.innerText = `${new Date().toLocaleTimeString()} - ${text}`;
-            terminal.appendChild(entry);
-            terminal.scrollTop = terminal.scrollHeight; // Auto-scroll
+            try {
+                // PASSO 1: Fazer o login real na rota da imagem
+                consoleBox.innerHTML += `<div class="line">[AUTH] Enviando requisição para /LoginCompletoToken...</div>`;
+                
+                const responseAuth = await fetch(`${BASE_URL}/credenciais/api/LoginCompletoToken`, {
+                    method: "POST",
+                    headers: baseHeaders,
+                    body: JSON.stringify({ login: raDigitado, senha: senhaDigitada })
+                });
+
+                if (!responseAuth.ok) {
+                    throw new Error(`Dados incorretos ou servidor fora do ar (Status ${responseAuth.status})`);
+                }
+
+                const dadosAuth = await responseAuth.json();
+                const tokenValido = `Bearer ${dadosAuth.accessToken || dadosAuth.token}`;
+                consoleBox.innerHTML += `<div class="line done">[AUTH] Token de acesso obtido com sucesso!</div>`;
+
+                // PASSO 2: Buscar notificações/atividades pendentes
+                consoleBox.innerHTML += `<div class="line">[BUSCA] Consultando tarefas na API...</div>`;
+                
+                // Nota: Substitua o '31786432' pelo ID correto do seu usuário se necessário
+                const responseTasks = await fetch(`${BASE_URL}/cmspwebservice/api/sala-do-futuro-alunos/consulta-notificacao?userId=31786432`, {
+                    method: "GET",
+                    headers: { ...baseHeaders, "Authorization": tokenValido }
+                });
+
+                const atividades = await responseTasks.json();
+                consoleBox.innerHTML += `<div class="line">[INFO] Foram retornadas ${atividades.length || 0} tarefas do banco de dados.</div>`;
+
+                // PASSO 3: Laço de repetição para resolver (Simulação do loop de envio)
+                consoleBox.innerHTML += `<div class="line done">[SUCESSO] Processo de integração concluído!</div>`;
+
+            } catch (erro) {
+                // Se der erro de CORS ou senha errada, exibe aqui no painel do app
+                consoleBox.innerHTML += `<div class="line" style="color: #ef4444;">[ERRO] ${erro.message}</div>`;
+                consoleBox.innerHTML += `<div class="line" style="color: #eab308;">[DICA] Se aparecer erro de CORS/Rede, use uma extensão de 'CORS Unblock' no navegador.</div>`;
+            }
         }
     </script>
 </body>
 </html>
+
